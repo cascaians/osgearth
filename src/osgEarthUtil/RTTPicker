@@ -41,6 +41,7 @@ namespace osgEarth { namespace Util
          * @param cameraSize Size of the RTT picking viewpoint.
          */
         RTTPicker(int cameraSize =256);
+        RTTPicker(int cameraWidth, int cameraHeight);
 
         /**
          * Number of pixels on each side of the clicked pixel to check for hits.
@@ -101,7 +102,8 @@ namespace osgEarth { namespace Util
         // builds the shaders for rendering to the pick camera. 
         VirtualProgram* createRTTProgram();
         
-        int                    _rttSize;     // size of the RTT image (pixels per side)
+        int                    _rttWidth;    // width in pixels of the RTT image
+        int                    _rttHeight;   // height in pixels of the RTT image
         int                    _buffer;      // buffer around pick point to check (pixels)
         osg::ref_ptr<Callback> _defaultCallback;
 

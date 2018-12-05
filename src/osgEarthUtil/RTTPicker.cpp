@@ -104,7 +104,20 @@ RTTPicker::RTTPicker(int cameraSize)
     _group = new osg::Group();
 
     // Size of the RTT camera image
-    _rttSize = std::max(cameraSize, 4);    
+    _rttWidth=_rttHeight=std::max(cameraSize, 4);
+
+    // pixels around the click to test
+    _buffer = 2;
+}
+
+RTTPicker::RTTPicker(int cameraWidth, int cameraHeight)
+{
+    // group that will hold RTT children for all cameras
+    _group = new osg::Group();
+
+    // Size of the RTT camera image
+    _rttWidth  = std::max(cameraWidth, 4);
+    _rttHeight = std::max(cameraHeight, 4);
 
     // pixels around the click to test
     _buffer = 2;
@@ -156,7 +169,7 @@ RTTPicker::getOrCreatePickContext(osg::View* view)
     c._view = view;
 
     c._image = new osg::Image();
-    c._image->allocateImage(_rttSize, _rttSize, 1, GL_RGBA, GL_UNSIGNED_BYTE);    
+    c._image->allocateImage(_rttWidth, _rttHeight, 1, GL_RGBA, GL_UNSIGNED_BYTE);
     
     // make an RTT camera and bind it to our imag:
     c._pickCamera = new osg::Camera();
@@ -164,7 +177,7 @@ RTTPicker::getOrCreatePickContext(osg::View* view)
     c._pickCamera->setClearColor( osg::Vec4(0,0,0,0) );
     c._pickCamera->setClearMask( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     c._pickCamera->setReferenceFrame( osg::Camera::ABSOLUTE_RF_INHERIT_VIEWPOINT ); 
-    c._pickCamera->setViewport( 0, 0, _rttSize, _rttSize );
+    c._pickCamera->setViewport( 0, 0, _rttWidth, _rttHeight );
     c._pickCamera->setRenderOrder( osg::Camera::PRE_RENDER, 1 );
     c._pickCamera->setRenderTargetImplementation( osg::Camera::FRAME_BUFFER_OBJECT );
     c._pickCamera->attach( osg::Camera::COLOR_BUFFER0, c._image.get() );
